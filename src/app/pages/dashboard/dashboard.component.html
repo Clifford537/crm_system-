@@ -1,0 +1,93 @@
+<app-haeder />
+
+<mat-card class="dashboard-container">
+  <h2><mat-icon>person</mat-icon> User Dashboard</h2>
+
+  <!-- 📄 View Mode -->
+  <div *ngIf="user && !editMode" class="info-grid">
+    <div class="view-row">
+      <span class="label">Name:</span>
+      <span class="value">{{ user.firstName }} {{ user.lastName }}</span>
+    </div>
+    <div class="view-row">
+      <span class="label">Email:</span>
+      <span class="value">{{ user.email }}</span>
+    </div>
+    <div class="view-row">
+      <span class="label">Phone:</span>
+      <span class="value">{{ user.phoneNumber }}</span>
+    </div>
+    <div class="view-row">
+      <span class="label">Role:</span>
+      <span class="value">{{ user.role }}</span>
+    </div>
+
+    <!-- 🖼️ Two-column image grid -->
+    <div class="image-preview-grid">
+      <div class="image-box" *ngIf="user.passport">
+        <mat-icon class="blue-icon">photo</mat-icon>
+        <p>Passport</p>
+        <img [src]="imageUrl(user.passport)" class="preview large" />
+      </div>
+      <div class="image-box" *ngIf="user.idImageFront">
+        <mat-icon class="blue-icon">badge</mat-icon>
+        <p>ID Front</p>
+        <img [src]="imageUrl(user.idImageFront)" class="preview large" />
+      </div>
+      <div class="image-box" *ngIf="user.idImageBack">
+        <mat-icon class="blue-icon">badge</mat-icon>
+        <p>ID Back</p>
+        <img [src]="imageUrl(user.idImageBack)" class="preview large" />
+      </div>
+    </div>
+  </div>
+
+  <!-- ✏️ Edit Mode -->
+  <form *ngIf="editMode" [formGroup]="form" (ngSubmit)="onSubmit()" class="edit-form" enctype="multipart/form-data">
+    <mat-form-field appearance="outline">
+      <mat-label>First Name</mat-label>
+      <input matInput formControlName="firstName" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Last Name</mat-label>
+      <input matInput formControlName="lastName" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Phone Number</mat-label>
+      <input matInput formControlName="phoneNumber" />
+    </mat-form-field>
+
+    <!-- 📷 Image Inputs -->
+    <div class="file-input-group">
+      <label><mat-icon>photo_camera</mat-icon> Passport Image</label>
+      <input type="file" (change)="onFileChange($event, 'passport')" accept="image/*" />
+      <img *ngIf="preview.passport" [src]="preview.passport" class="preview" />
+    </div>
+
+    <div class="file-input-group">
+      <label><mat-icon>badge</mat-icon> ID Front</label>
+      <input type="file" (change)="onFileChange($event, 'front')" accept="image/*" />
+      <img *ngIf="preview.front" [src]="preview.front" class="preview" />
+    </div>
+
+    <div class="file-input-group">
+      <label><mat-icon>badge</mat-icon> ID Back</label>
+      <input type="file" (change)="onFileChange($event, 'back')" accept="image/*" />
+      <img *ngIf="preview.back" [src]="preview.back" class="preview" />
+    </div>
+
+    <div class="actions">
+      <button mat-button type="button" (click)="toggleEdit()">Cancel</button>
+      <button mat-raised-button color="primary" type="submit">Save</button>
+    </div>
+  </form>
+
+  <!-- 🧭 Default View Actions -->
+  <div *ngIf="!editMode" class="actions">
+    <button mat-raised-button color="accent" (click)="toggleEdit()">
+      <mat-icon>edit</mat-icon> Edit Details
+    </button>
+  </div>
+</mat-card>

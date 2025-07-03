@@ -1,0 +1,43 @@
+<mat-toolbar color="primary" class="header">
+  <!-- Logo that navigates to home -->
+  <span class="logo" routerLink="/" style="cursor: pointer;">
+    <mat-icon>business_center</mat-icon>
+    <strong>CRM System</strong>
+  </span>
+
+  <span class="spacer"></span>
+
+  <!-- Guest view -->
+  <ng-container *ngIf="!isLoggedIn(); else loggedIn">
+    <button mat-raised-button color="accent" routerLink="/login" routerLinkActive="active-link">
+      Login
+    </button>
+    <button mat-raised-button color="accent" routerLink="/register" routerLinkActive="active-link">
+      Register
+    </button>
+  </ng-container>
+
+  <!-- Logged-in view -->
+  <ng-template #loggedIn>
+    <span class="welcome">Hi, {{ username }}</span>
+
+    <button mat-raised-button color="accent" routerLink="/dashboard" routerLinkActive="active-link">
+      Dashboard
+    </button>
+
+    <button
+      *ngIf="isAdmin()"
+      mat-raised-button
+      color="accent"
+      routerLink="/admin"
+      routerLinkActive="active-link"
+    >
+      Admin
+    </button>
+
+<button mat-icon-button matTooltip="Logout" (click)="logout()" class="logout-btn">
+  <mat-icon>logout</mat-icon>
+</button>
+
+  </ng-template>
+</mat-toolbar>

@@ -1,0 +1,26 @@
+<app-haeder/>
+<mat-card class="login-card">
+  <h2 class="title">Login to Your Account</h2>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Email</mat-label>
+      <mat-icon matPrefix>email</mat-icon>
+      <input matInput type="email" formControlName="email" required />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Password</mat-label>
+      <mat-icon matPrefix>lock</mat-icon>
+      <input matInput type="password" formControlName="password" required />
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" class="submit-btn" [disabled]="form.invalid">
+      <mat-icon>login</mat-icon>&nbsp; Login
+    </button>
+
+    <mat-error *ngIf="error" class="error-message">
+      {{ error }}
+    </mat-error>
+  </form>
+</mat-card>

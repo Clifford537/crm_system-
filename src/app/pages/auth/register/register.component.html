@@ -1,0 +1,71 @@
+<app-haeder/>
+<mat-card class="register-card">
+  <h3 class="title">Create Your Account</h3>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" enctype="multipart/form-data">
+    <div class="form-grid">
+      <mat-form-field appearance="outline">
+        <mat-label>First Name</mat-label>
+        <mat-icon matPrefix>person</mat-icon>
+        <input matInput formControlName="firstName" required />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Last Name</mat-label>
+        <mat-icon matPrefix>person_outline</mat-icon>
+        <input matInput formControlName="lastName" required />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Email</mat-label>
+        <mat-icon matPrefix>email</mat-icon>
+        <input matInput type="email" formControlName="email" required />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Phone Number</mat-label>
+        <mat-icon matPrefix>phone</mat-icon>
+        <input matInput type="tel" formControlName="phoneNumber" required />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Password</mat-label>
+        <mat-icon matPrefix>lock</mat-icon>
+        <input matInput type="password" formControlName="password" required />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Role</mat-label>
+        <mat-icon matPrefix>verified_user</mat-icon>
+        <mat-select formControlName="role" required>
+          <mat-option value="user">User</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <div class="file-group">
+        <label><mat-icon>photo_camera</mat-icon> Passport Image</label>
+        <input type="file" (change)="onFileChange($event, 'passport')" accept="image/*" />
+        <img *ngIf="preview.passport" [src]="preview.passport" class="image-preview" />
+      </div>
+
+      <div class="file-group">
+        <label><mat-icon>badge</mat-icon> ID Front Image</label>
+        <input type="file" (change)="onFileChange($event, 'front')" accept="image/*" />
+        <img *ngIf="preview.front" [src]="preview.front" class="image-preview" />
+      </div>
+
+      <div class="file-group">
+        <label><mat-icon>badge</mat-icon> ID Back Image</label>
+        <input type="file" (change)="onFileChange($event, 'back')" accept="image/*" />
+        <img *ngIf="preview.back" [src]="preview.back" class="image-preview" />
+      </div>
+    </div>
+
+    <div class="button-container">
+      <button mat-raised-button color="accent" class="submit-btn" [disabled]="form.invalid">
+        <mat-icon>how_to_reg</mat-icon>
+        &nbsp;Register
+      </button>
+    </div>
+  </form>
+</mat-card>

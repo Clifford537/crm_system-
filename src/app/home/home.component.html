@@ -1,0 +1,29 @@
+<app-haeder></app-haeder>
+
+<div class="main-content">
+  <mat-card class="welcome-card mat-elevation-z8">
+    <h1>
+      <mat-icon>dashboard_customize</mat-icon>
+      Welcome to the CRM System
+    </h1>
+    <p>
+      Create account and Login to have full access.
+    </p>
+
+    <div class="action-buttons">
+      <button mat-raised-button color="primary" routerLink="/register">
+        <mat-icon>person_add</mat-icon>
+        &nbsp; Register
+      </button>
+
+      <button mat-stroked-button color="accent" routerLink="/login">
+        <mat-icon>login</mat-icon>
+        &nbsp; Login
+      </button>
+    </div>
+  </mat-card>
+</div>
+
+<footer class="footer">
+  &copy; {{ currentYear }} CRM System. All rights reserved.
+</footer>

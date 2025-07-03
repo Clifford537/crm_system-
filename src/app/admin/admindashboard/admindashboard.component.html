@@ -1,0 +1,117 @@
+<app-haeder/>
+<mat-card class="admin-dashboard">
+  <h2>
+    <mat-icon>supervisor_account</mat-icon>
+    Admin Dashboard
+  </h2>
+
+  <mat-form-field appearance="outline" class="full-width search-field">
+    <mat-label>Search Users</mat-label>
+    <mat-icon matPrefix>search</mat-icon>
+    <input matInput [(ngModel)]="searchTerm" (input)="filterUsers()" placeholder="Search by name, email, or role" />
+  </mat-form-field>
+
+  <table mat-table [dataSource]="filteredUsers" class="mat-elevation-z3 table">
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef> Name </th>
+      <td mat-cell *matCellDef="let u"> {{ u.firstName }} {{ u.lastName }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="email">
+      <th mat-header-cell *matHeaderCellDef> Email </th>
+      <td mat-cell *matCellDef="let u"> {{ u.email }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="role">
+      <th mat-header-cell *matHeaderCellDef> Role </th>
+      <td mat-cell *matCellDef="let u"> {{ u.role }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef> Actions </th>
+      <td mat-cell *matCellDef="let u">
+        <button mat-icon-button color="primary" (click)="openEditModal(u)">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-icon-button color="accent" (click)="openViewModal(u)">
+          <mat-icon>visibility</mat-icon>
+        </button>
+        <button mat-icon-button color="warn" (click)="deleteUser(u.id)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</mat-card>
+
+<!-- ✏️ Edit Modal -->
+<ng-template #editModal>
+  <h2 mat-dialog-title>Edit User</h2>
+  <mat-dialog-content>
+    <form [formGroup]="editForm" class="edit-form">
+      <mat-form-field class="full-width">
+        <mat-label>First Name</mat-label>
+        <input matInput formControlName="firstName" />
+      </mat-form-field>
+
+      <mat-form-field class="full-width">
+        <mat-label>Last Name</mat-label>
+        <input matInput formControlName="lastName" />
+      </mat-form-field>
+
+      <mat-form-field class="full-width">
+        <mat-label>Role</mat-label>
+        <mat-select formControlName="role">
+          <mat-option value="user">User</mat-option>
+          <mat-option value="admin">Admin</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <label class="upload-label">Passport</label>
+      <input type="file" (change)="onFileChange($event, 'passport')" />
+
+      <label class="upload-label">ID Front</label>
+      <input type="file" (change)="onFileChange($event, 'idImageFront')" />
+
+      <label class="upload-label">ID Back</label>
+      <input type="file" (change)="onFileChange($event, 'idImageBack')" />
+    </form>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button (click)="closeDialog()">Cancel</button>
+    <button mat-raised-button color="primary" (click)="saveChanges()">Save</button>
+  </mat-dialog-actions>
+</ng-template>
+
+<!-- 👁️ View Modal -->
+<ng-template #viewModal>
+  <h2 mat-dialog-title>User Details</h2>
+  <mat-dialog-content>
+    <p><strong>Name:</strong> {{ selectedUser.firstName }} {{ selectedUser.lastName }}</p>
+    <p><strong>Email:</strong> {{ selectedUser.email }}</p>
+    <p><strong>Role:</strong> {{ selectedUser.role }}</p>
+
+    <div class="image-group">
+      <div class="img-preview" *ngIf="selectedUser.passport">
+        <img [src]="imageUrl(selectedUser.passport)" alt="Passport" />
+        <label>Passport</label>
+      </div>
+      <div class="img-preview" *ngIf="selectedUser.idImageFront">
+        <img [src]="imageUrl(selectedUser.idImageFront)" alt="Front ID" />
+        <label>ID Front</label>
+      </div>
+      <div class="img-preview" *ngIf="selectedUser.idImageBack">
+        <img [src]="imageUrl(selectedUser.idImageBack)" alt="Back ID" />
+        <label>ID Back</label>
+      </div>
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button (click)="closeDialog()">Close</button>
+  </mat-dialog-actions>
+</ng-template>
