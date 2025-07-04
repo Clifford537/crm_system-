@@ -1,4 +1,5 @@
-<app-haeder/>
+<app-haeder />
+
 <mat-card class="admin-dashboard">
   <h2>
     <mat-icon>supervisor_account</mat-icon>
@@ -72,12 +73,15 @@
 
       <label class="upload-label">Passport</label>
       <input type="file" (change)="onFileChange($event, 'passport')" />
+      <img *ngIf="selectedUser.passport" [src]="imageUrl(selectedUser.passport)" height="60" />
 
       <label class="upload-label">ID Front</label>
       <input type="file" (change)="onFileChange($event, 'idImageFront')" />
+      <img *ngIf="selectedUser.idImageFront" [src]="imageUrl(selectedUser.idImageFront)" height="60" />
 
       <label class="upload-label">ID Back</label>
       <input type="file" (change)="onFileChange($event, 'idImageBack')" />
+      <img *ngIf="selectedUser.idImageBack" [src]="imageUrl(selectedUser.idImageBack)" height="60" />
     </form>
   </mat-dialog-content>
 

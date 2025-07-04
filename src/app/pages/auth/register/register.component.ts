@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../services/auth.service';
 
@@ -31,7 +32,6 @@ import { HaederComponent } from '../../../components/haeder/haeder.component';
 export class RegisterComponent {
   form: FormGroup;
 
-  // Store files and preview URLs
   files: Record<'passport' | 'front' | 'back', File | null> = {
     passport: null,
     front: null,
@@ -44,7 +44,11 @@ export class RegisterComponent {
     back: ''
   };
 
-  constructor(private fb: FormBuilder, private auth: AuthService) {
+  constructor(
+    private fb: FormBuilder,
+    private auth: AuthService,
+    private router: Router // Inject Router
+  ) {
     this.form = this.fb.group({
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
@@ -77,7 +81,6 @@ export class RegisterComponent {
       formData.append(key, String(value));
     });
 
-    // Append files if present
     for (const field of ['passport', 'front', 'back'] as const) {
       if (this.files[field]) {
         formData.append(field, this.files[field]!);
@@ -85,7 +88,10 @@ export class RegisterComponent {
     }
 
     this.auth.register(formData).subscribe({
-      next: () => alert('Registered successfully'),
+      next: () => {
+        alert('Registered successfully');
+        this.router.navigate(['/login']); 
+      },
       error: (err) => alert(err.error?.message || 'Registration failed')
     });
   }

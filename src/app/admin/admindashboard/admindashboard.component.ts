@@ -9,8 +9,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { MatCardModule } from '@angular/material/card';
-import { AuthService } from '../../services/auth.service';
 import { FormsModule } from '@angular/forms';
+import { AuthService } from '../../services/auth.service';
 import { HaederComponent } from '../../components/haeder/haeder.component';
 
 @Component({
@@ -75,7 +75,7 @@ export class AdmindashboardComponent implements OnInit {
   }
 
   openEditModal(user: any): void {
-    this.selectedUser = user;
+    this.selectedUser = { ...user }; // clone to prevent mutation
     this.editForm = this.fb.group({
       firstName: [user.firstName],
       lastName: [user.lastName],
@@ -84,6 +84,7 @@ export class AdmindashboardComponent implements OnInit {
       idImageFront: [null],
       idImageBack: [null]
     });
+
     this.dialog.open(this.editModal, {
       width: '450px',
       enterAnimationDuration: '250ms',
@@ -106,7 +107,15 @@ export class AdmindashboardComponent implements OnInit {
 
   onFileChange(event: Event, control: string): void {
     const file = (event.target as HTMLInputElement)?.files?.[0];
-    if (file) this.editForm.get(control)?.setValue(file);
+    if (file) {
+      this.editForm.get(control)?.setValue(file);
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.selectedUser[control] = reader.result; // show preview in modal
+      };
+      reader.readAsDataURL(file);
+    }
   }
 
   saveChanges(): void {
@@ -133,7 +142,10 @@ export class AdmindashboardComponent implements OnInit {
     }
   }
 
-  imageUrl(filename: string): string {
-    return `http://localhost:5000/uploads/id-images/${filename}`;
+  imageUrl(filenameOrDataUrl: string): string {
+    if (!filenameOrDataUrl) return '';
+    return filenameOrDataUrl.startsWith('data:')
+      ? filenameOrDataUrl
+      : `http://localhost:5000/uploads/id-images/${filenameOrDataUrl}`;
   }
 }
